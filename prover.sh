@@ -8,9 +8,10 @@
 echo "Enter your EVM-based reward address (0x...):"
 read REWARD_ADDRESS
 
-# Download and run setup script
-curl -L github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_prover.sh -o ~/setup_prover.sh
-bash ~/setup_prover.sh
+# Download and run setup script with reward address
+curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_prover.sh -o ~/setup_prover.sh
+chmod +x ~/setup_prover.sh
+bash ~/setup_prover.sh "$REWARD_ADDRESS"
 
 # Change directory and verify checksum
 cd
@@ -20,9 +21,9 @@ sha256sum cysic-prover/*.so cysic-prover/prover
 mkdir -p cysic-prover/~/.cysic/assets/scroll/v1/params
 mkdir -p .scroll_prover/params
 
-curl -L --retry 999 -C - circuit-release.s3.us-west-2.amazonaws.com/setup/params20 -o .scroll_prover/params/params20
-curl -L --retry 999 -C - circuit-release.s3.us-west-2.amazonaws.com/setup/params24 -o .scroll_prover/params/params24
-curl -L --retry 999 -C - circuit-release.s3.us-west-2.amazonaws.com/setup/params25 -o .scroll_prover/params/params25
+curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setup/params20 -o .scroll_prover/params/params20
+curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setup/params24 -o .scroll_prover/params/params24
+curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setup/params25 -o .scroll_prover/params/params25
 
 cp .scroll_prover/params/* cysic-prover/~/.cysic/assets/scroll/v1/params/
 sha256sum .scroll_prover/params/*
