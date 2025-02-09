@@ -22,10 +22,10 @@ read REWARD_ADDRESS
 echo "Enter your EVM-based reward address2 (0x...):"
 read REWARD_ADDRESS2
 
-apt install curl -y
-apt install supervisor -y
-apt update -y
-apt upgrade -y
+sudo apt install curl -y
+sudo apt install supervisor -y
+sudo apt update -y
+sudo apt upgrade -y
 
 # Download and run setup script with reward address
 curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_prover.sh -o ~/setup_prover.sh
