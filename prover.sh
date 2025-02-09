@@ -19,10 +19,18 @@ echo "                                                                          
 echo "Enter your EVM-based reward address (0x...):"
 read REWARD_ADDRESS
 
+apt install curl -y
+apt install supervisor -y
+apt update -y
+apt upgrade -y
+
 # Download and run setup script with reward address
 curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_prover.sh -o ~/setup_prover.sh
 chmod +x ~/setup_prover.sh
 bash ~/setup_prover.sh "$REWARD_ADDRESS"
+
+mkdir -p cysic-prover/~/.cysic/assets/
+cp *.key cysic-prover/~/.cysic/assets/
 
 # Change directory and verify checksum
 cd
@@ -38,9 +46,6 @@ curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setu
 
 cp .scroll_prover/params/* cysic-prover/~/.cysic/assets/scroll/v1/params/
 sha256sum .scroll_prover/params/*
-
-# Install Supervisor
-apt update && apt install -y supervisor
 
 # Create Supervisor config
 echo '[unix_http_server]
@@ -80,3 +85,4 @@ environment=LD_LIBRARY_PATH="/root/cysic-prover",CHAIN_ID="534352",REWARD_ADDRES
 supervisord -c supervisord.conf
 
 echo "Installation complete. Prover is running under Supervisor."
+supervisorctl tail -f cysic-prover
