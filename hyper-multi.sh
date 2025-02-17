@@ -22,6 +22,9 @@ read REWARD_ADDRESS
 echo "Enter your EVM-based reward address2 (0x...):"
 read REWARD_ADDRESS2
 
+echo "masukkan jeda antara prover1 dan prover2"
+read jeda
+
 sudo apt install curl -y
 sudo apt install supervisor -y
 sudo apt update -y
@@ -113,7 +116,7 @@ supervisorctl stop cysic-prover-2
 supervisorctl tail cysic-prover
 supervisorctl tail cysic-prover-2
 
-sleep 5000
+sleep "$jeda"
 supervisorctl start cysic-prover-2
 
 supervisorctl tail cysic-prover
