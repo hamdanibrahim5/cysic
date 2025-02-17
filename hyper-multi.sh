@@ -32,8 +32,14 @@ curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup
 chmod +x ~/setup_prover.sh
 bash ~/setup_prover.sh "$REWARD_ADDRESS"
 
+mv -r cysic-prover cysic-prover-2
+
+bash ~/setup_prover.sh "$REWARD_ADDRESS2"
+
 mkdir -p cysic-prover/~/.cysic/assets/
+mkdir -p cysic-prover2/~/.cysic/assets/
 cp *.key cysic-prover/~/.cysic/assets/
+cp *.key cysic-prover2/~/.cysic/assets/
 
 # Change directory and verify checksum
 cd
@@ -41,6 +47,7 @@ sha256sum cysic-prover/*.so cysic-prover/prover
 
 # Download dependencies and verify checksums
 mkdir -p cysic-prover/~/.cysic/assets/scroll/v1/params
+mkdir -p cysic-prover-2/~/.cysic/assets/scroll/v1/params
 mkdir -p .scroll_prover/params
 
 curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setup/params20 -o .scroll_prover/params/params20
@@ -48,6 +55,7 @@ curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setu
 curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setup/params25 -o .scroll_prover/params/params25
 
 cp .scroll_prover/params/* cysic-prover/~/.cysic/assets/scroll/v1/params/
+cp .scroll_prover/params/* cysic-prover-2/~/.cysic/assets/scroll/v1/params/
 sha256sum .scroll_prover/params/*
 
 # Create Supervisor config
@@ -82,7 +90,7 @@ redirect_stderr=true
 stdout_logfile=/home/ubuntu/cysic-prover/cysic-prover.log
 stdout_logfile_maxbytes=1GB
 stdout_logfile_backups=1
-environment=LD_LIBRARY_PATH="/home/ubuntu/cysic-prover",CHAIN_ID="534352",REWARD_ADDRESS="$REWARD_ADDRESS"
+environment=LD_LIBRARY_PATH="/home/ubuntu/cysic-prover",CHAIN_ID="534352"
 
 [program:cysic-prover-2]
 command=/home/ubuntu/cysic-prover-2/prover
@@ -94,11 +102,19 @@ redirect_stderr=true
 stdout_logfile=/home/ubuntu/cysic-prover-2/cysic-prover.log
 stdout_logfile_maxbytes=1GB
 stdout_logfile_backups=1
-environment=LD_LIBRARY_PATH="/home/ubuntu/cysic-prover-2",CHAIN_ID="534352",REWARD_ADDRESS="$REWARD_ADDRESS2"' > supervisord.conf
+environment=LD_LIBRARY_PATH="/home/ubuntu/cysic-prover-2",CHAIN_ID="534352"' > supervisord.conf
 
 
 # Start Supervisor
 supervisord -c supervisord.conf
 
 echo "Installation complete. Prover is running under Supervisor."
-supervisorctl tail -f cysic-prover
+supervisorctl stop cysic-prover-2
+supervisorctl tail cysic-prover
+supervisorctl tail cysic-prover-2
+
+sleep 5000
+supervisorctl start cysic-prover-2
+
+supervisorctl tail cysic-prover
+supervisorctl tail cysic-prover-2
