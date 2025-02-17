@@ -36,6 +36,7 @@ chmod +x ~/setup_prover.sh
 bash ~/setup_prover.sh "$REWARD_ADDRESS"
 
 mv cysic-prover/ cysic-prover-2/
+ls cysic-prover-2/
 
 bash ~/setup_prover.sh "$REWARD_ADDRESS2"
 
@@ -46,7 +47,6 @@ cp *.key cysic-prover-2/~/.cysic/assets/
 
 # Change directory and verify checksum
 cd
-sha256sum cysic-prover/*.so cysic-prover/prover
 
 # Download dependencies and verify checksums
 mkdir -p cysic-prover/~/.cysic/assets/scroll/v1/params
@@ -58,8 +58,9 @@ curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setu
 curl -L --retry 999 -C - https://circuit-release.s3.us-west-2.amazonaws.com/setup/params25 -o .scroll_prover/params/params25
 
 cp .scroll_prover/params/* cysic-prover/~/.cysic/assets/scroll/v1/params/
+ls cysic-prover/~/.cysic/assets/scroll/v1/params/
 cp .scroll_prover/params/* cysic-prover-2/~/.cysic/assets/scroll/v1/params/
-sha256sum .scroll_prover/params/*
+ls cysic-prover-2/~/.cysic/assets/scroll/v1/params/
 
 # Create Supervisor config
 echo '[unix_http_server]
