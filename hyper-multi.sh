@@ -35,14 +35,14 @@ curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup
 chmod +x ~/setup_prover.sh
 bash ~/setup_prover.sh "$REWARD_ADDRESS"
 
-mv -r cysic-prover cysic-prover-2
+mv cysic-prover/ cysic-prover-2/
 
 bash ~/setup_prover.sh "$REWARD_ADDRESS2"
 
 mkdir -p cysic-prover/~/.cysic/assets/
-mkdir -p cysic-prover2/~/.cysic/assets/
+mkdir -p cysic-prover-2/~/.cysic/assets/
 cp *.key cysic-prover/~/.cysic/assets/
-cp *.key cysic-prover2/~/.cysic/assets/
+cp *.key cysic-prover-2/~/.cysic/assets/
 
 # Change directory and verify checksum
 cd
